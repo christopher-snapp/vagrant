@@ -1,5 +1,6 @@
 /usr/bin/yum -y clean all
 
+rm -rf /root/*
 rm -rf VBoxGuestAdditions_*.iso .*version
 
 # zero out the free space to save space in the final image
