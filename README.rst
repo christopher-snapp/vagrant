@@ -6,8 +6,18 @@ VAGRANT
 Getting Started
 ---------------
 
-Installing rbenv
-~~~~~~~~~~~~~~~~
+Installing Vagrant
+~~~~~~~~~~~~~~~~~~
+Vagrant is no longer installed via a Ruby Gem.  Simply head to
+http://downloads.vagrantup.com/ and install the appropriate package for your
+OS.
+
+If you intend to create your own vagrant boxes then continue through the next
+steps to get Ruby and VeeWee installed, otherwise skip ahead to "Running the
+Minimal CentOS Box".
+
+Installing Ruby
+~~~~~~~~~~~~~~~
 Rather than installing ruby via your distribution's package manager it is
 recommended that you install ruby via ``rbenv``.  By using ``rbenv`` you ensure
 all ruby gems and commands are run out of ``~/.rbenv`` which enables you to be
@@ -40,30 +50,39 @@ package names.
 .. Warning::
     You must restart your shell before continuing so ``rbenv`` is added to your ``$PATH``!
 
-
-Installing Ruby
-~~~~~~~~~~~~~~~~
 At this point you should have the ``rbenv`` command in your ``$PATH``.  Now we
 can move on to installing Ruby.
 
 .. code-block::
 
-    rbenv install 1.9.3-p327
+    rbenv install 1.9.3-p392
     rbenv rehash
-    rbenv global 1.9.3-p327
+    rbenv global 1.9.3-p392
 
 .. Tip::
     By typing ``rbenv install <tab><tab>`` you should be presented with a list
     of available versions.  Simply select the latest released version and
-    continue.  Here we show installing version ``1.9.3-p327``
+    continue.  Here we show installing version ``1.9.3-p392``
 
-Installing Vagrant + Veewee
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Create ``~/.gemrc`` with the following contents:
 
 .. code-block::
 
-    gem install vagrant veewee --no-ri --no-rdoc
+    install: --no-ri --no-rdoc
+    update: --no-ri --no-rd
+
+Installing VeeWee
+~~~~~~~~~~~~~~~~~
+When running the latest version of Vagrant from vagrantup.com you should install VeeWee from the source repo.
+
+.. code-block::
+
+    gem install bundler --no-ri --no-rdoc
     rbenv rehash
+    git clone https://github.com/jedi4ever/veewee.git
+    cd veewee
+    bundle install
+    alias veewee='BUNDLE_GEMFILE=$HOME/veewee/Gemfile bundle exec veewee'
 
 
 Building the Minimal CentOS Box
@@ -73,7 +92,7 @@ definitions directory.
 
 .. code-block::
 
-    vagrant basebox build 'centos-6.3-minimal'
+    veewee vbox build 'centos-6.3-minimal'
 
 .. Note::
     * The ``build`` command will handle retrieving (and caching) the required
@@ -92,7 +111,7 @@ Now, let's export the built image to a vagrant box.
 
     mkdir -p exports
     cd exports
-    vagrant basebox export 'centos-6.3-minimal'
+    veewee vbox export 'centos-6.3-minimal'
 
 .. Tip::
     From here you could place the exported vagrant box on an http accessible
@@ -115,10 +134,6 @@ Let's instantiate a virtual machine based on our new minimal centos box.
     mkdir -p machines/testvm
     cd machines/testvm
     vagrant init centos-6.3-minimal
-
-.. Tip::
-    You can set the virtual machine's hostname if you'd like by editing the
-    ``Vagrantfile`` and adding the line ``config.vm.host_name = "testvm"``
 
 **Starting the VM**
 
