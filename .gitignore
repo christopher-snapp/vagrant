@@ -1,3 +1,5 @@
 exports
 iso
 machines
+packer_cache
+*.box

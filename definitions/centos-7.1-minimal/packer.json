@@ -1,0 +1,18 @@
+{
+  "builders": [{
+    "type": "virtualbox-iso",
+    "guest_os_type": "RedHat_64",
+    "iso_checksum_type": "md5",
+    "iso_checksum": "d07ab3e615c66a8b2e9a50f4852e6a77",
+    "iso_url": "http://mirror.fusioncloud.co/pub/centos/7.1.1503/isos/x86_64/CentOS-7-x86_64-Minimal-1503-01.iso",
+    "ssh_username": "vagrant",
+    "ssh_password": "vagrant",
+    "shutdown_command": "sudo -S shutdown -P now",
+    "http_directory": ".",
+    "boot_command": [
+      "<wait><esc><esc>",
+      "linux ks=http://{{.HTTPIP}}:{{.HTTPPort}}/ks.cfg<enter>"
+    ]
+  }],
+  "post-processors": ["vagrant"]
+}
